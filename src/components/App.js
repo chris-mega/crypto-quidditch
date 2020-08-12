@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
-import logo from '../logo.png';
+import { Card, ListGroup, ListGroupItem, CardDeck, Button } from 'react-bootstrap';
 import './App.css';
-import Web3 from 'web3';
 import QuidditchPlayer from '../abis/QuidditchPlayer.json'
+import { loadWeb3 } from './eth/web3'
+import QuidditchApi from './eth/api'
 
 class App extends Component {
   constructor(props){
@@ -11,26 +12,23 @@ class App extends Component {
       account: '',
       contract: null,
       myPlayers: [],
+      marketPlayers: [],
+      api: null,
     };
   }
   async componentWillMount() {
-    await this.loadWeb3();
-    await this.loadBlockchainData();
-  }
-  async loadWeb3() {
-    if (window.ethereum) {
-      window.web3 = new Web3(window.ethereum);
-      await window.ethereum.enable();
-    } else if (window.web3) {
-      window.web3 = new Web3(window.web3.currentProvider);
-    } else {
-      window.alert('No-Ethereum browser detected. Install Metamask');
+    try{
+      const web3 = await loadWeb3();
+      await this.loadBlockchainData(web3);
+    } catch(error){
+      console.log(error)
     }
   }
-  async loadBlockchainData() {
-    const web3 = window.web3;
+
+  async loadBlockchainData(web3) {
     const accounts = await web3.eth.getAccounts();
-    this.setState({ account: accounts[0] });
+    const account = accounts[0];
+    this.setState({ account: account });
 
     const networkId = await web3.eth.net.getId();
     const networkData = QuidditchPlayer.networks[networkId];
@@ -39,12 +37,35 @@ class App extends Component {
       const address = networkData.address;
       const contract = new web3.eth.Contract(abi, address);
       this.setState({ contract: contract });
+
+      const api = new QuidditchApi(contract);
+      this.setState({ api: api });
+      
+      const results = await api.getPlayers();
+      this.setState({ marketPlayers: results });
+      
+      // get players owned
+      const owned = await api.getUserPlayers(account);
+      console.log(owned)
+      this.setState({ myPlayers: owned });
     } else {
       window.alert('Smart contract not deployed');
     }
   }
 
+  async onClick(id){
+    const { api, account } = this.state;
+    await api.buyPlayer(id, account)
+      .then(response => {
+        console.log('nice');
+      })
+      .catch(error => {
+        console.log(error)
+      })
+  }
+
   render() {
+    const { marketPlayers } = this.state;
     return (
       <div>
         <nav className="navbar navbar-dark fixed-top bg-dark flex-md-nowrap p-0 shadow">
@@ -61,25 +82,29 @@ class App extends Component {
           <div className="row">
             <main role="main" className="col-lg-12 d-flex text-center">
               <div className="content mr-auto ml-auto">
-                <a
-                  href="http://www.dappuniversity.com/bootcamp"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <img src={logo} className="App-logo" alt="logo" />
-                </a>
-                <h1>Dapp University Starter Kit</h1>
-                <p>
-                  Edit <code>src/components/App.js</code> and save to reload.
-                </p>
-                <a
-                  className="App-link"
-                  href="http://www.dappuniversity.com/bootcamp"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  LEARN BLOCKCHAIN <u><b>NOW! </b></u>
-                </a>
+                <CardDeck>
+                  {
+                    marketPlayers.map((player, i) => 
+                    <Card 
+                      style={{ width: '18rem' }}
+                      key={i}
+                      bg={player.cannon ? 'info' : 'light'}
+                      text={player.cannon ? 'white' : 'dark'}
+                    >
+                      <Card.Img variant="top" src="holder.js/100px180?text=Image cap" />
+                      <Card.Header>
+                        <Card.Title>{player.name}</Card.Title>
+                        <Card.Text>{player.position}</Card.Text>
+                      </Card.Header>
+                      <ListGroup>
+                        <ListGroupItem className='listItem'><b>Category: </b>{player.category}</ListGroupItem>
+                        <ListGroupItem className='listItem'><b>Team: </b>{player.team}</ListGroupItem>
+                      </ListGroup>
+                      <Button variant="warning" onClick={() => this.onClick(i)}>Buy</Button>
+                    </Card>
+                    )
+                  }
+                </CardDeck>
               </div>
             </main>
           </div>
