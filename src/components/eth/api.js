@@ -15,7 +15,6 @@ class QuidditchApi{
 
   async getUserPlayers(account){
     const balance = await this.contract.methods.balanceOf(account).call();
-    console.log('balance', balance.toNumber())
     var players = []
     if(balance){
       for(var i = 0; i< balance.toNumber(); i++){
@@ -33,7 +32,6 @@ class QuidditchApi{
       const response = await this.contract.methods.addPlayerToUser(id).send({from: account});
       return response;
     }catch(error){
-      console.log(error)
       if(error.code === -32603)
         throw new Error('You already own this');
       else throw new Error('Something went wrong');
