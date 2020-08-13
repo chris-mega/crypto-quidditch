@@ -1,14 +1,13 @@
 import React, { Component } from 'react';
-import { Card, ListGroup, ListGroupItem, CardDeck, Button } from 'react-bootstrap';
+import { CardDeck } from 'react-bootstrap';
+import QuidditchCard from './Card'
 
 class Marketplace extends Component {
-  constructor(props){
-    super(props);
-    this.state = {
-      marketPlayers: [],
-    };
-  }
-  async componentWillMount() {
+  state = {
+    marketPlayers: [],
+  };
+
+  async componentDidMount() {
     try{
       await this.loadBlockchainData();
     } catch(error){
@@ -40,11 +39,10 @@ class Marketplace extends Component {
     };
 
     this.setState({ marketPlayers: market });
-  
   }
 
   async onClick(id){
-    const { api, account } = this.state;
+    const { api, account } = this.props;
     await api.buyPlayer(id, account)
       .then(response => {
         console.log('nice');
@@ -61,26 +59,7 @@ class Marketplace extends Component {
         <CardDeck>
           {
             marketPlayers.map((player, i) => 
-            <Card 
-              style={{ width: '18rem' }}
-              key={i}
-              bg={player.cannon ? 'info' : 'light'}
-              text={player.cannon ? 'white' : 'dark'}
-            >
-              <Card.Img variant="top" src="holder.js/100px180?text=Image cap" />
-              <Card.Header>
-                <Card.Title>{player.name}</Card.Title>
-                <Card.Text>{player.position}</Card.Text>
-              </Card.Header>
-              <ListGroup>
-                <ListGroupItem className='listItem'><b>Category: </b>{player.category}</ListGroupItem>
-                <ListGroupItem className='listItem'><b>Team: </b>{player.team}</ListGroupItem>
-              </ListGroup>
-              {
-                !player.owned &&
-                <Button variant="warning" onClick={() => this.onClick(i)}>Buy</Button>
-              }
-            </Card>
+              <QuidditchCard player={player} onClick={() => this.onClick(i)} key={i}/>
             )
           }
         </CardDeck>

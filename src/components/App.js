@@ -62,7 +62,7 @@ class App extends Component {
           <div className="row">
             <main role="main" className="col-lg-12 d-flex text-center">
               <Switch>
-                <Route exact path='/' component={() => <MarketPlace />}/>
+                <Route exact path='/' component={() => <MarketPlace api={api} account={account}/>}/>
                 <Route exact path='/marketplace' component={() => <MarketPlace api={api} account={account}/>}/>
                 <Route exact path='/myplayers' component={() => <MyPlayers />}/>
               </Switch>
