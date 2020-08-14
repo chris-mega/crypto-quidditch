@@ -3,13 +3,14 @@ export const UPDATE_OWNED = 'UPDATE_OWNED_PLAYERS';
 export const UPDATE_MARKET = 'UPDATE_MARKET_PLAYERS';
 
 export function changeAllPlayers(list) {
-  var all = [];
+  var all = {};
   var own = [];
-  for(var player of list){
+  for(var playerNum in list){
+    var player = list[playerNum];
     if(player.owned)
       own.push(player);
     else
-      all.push(player);
+      all[playerNum] = player;
   }
   return {
     type: CHANGE_ALL,

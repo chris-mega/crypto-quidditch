@@ -1,10 +1,16 @@
 import React, { Component } from 'react';
-import { CardDeck } from 'react-bootstrap';
+import { CardColumns } from 'react-bootstrap';
 import { connect } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 import { changeAllPlayers } from './redux/playerActions';
 import QuidditchCard from './Card'
 
 class Marketplace extends Component {
+  routeChange = () => {
+    let history = useHistory();
+    history.push('/myplayers');
+  }
+
   async componentDidMount() {
     try{
       await this.loadBlockchainData();
@@ -17,8 +23,9 @@ class Marketplace extends Component {
     const { api, account, dispatch } = this.props;
       
     const results = await api.getPlayers();
-    var market = [];
-    for(var player of results) {
+    var market = {};
+    for(var playerNum in results) {
+      var player = results[playerNum];
       const newPlayer = {
         name: player.name,
         team: player.team,
@@ -27,7 +34,7 @@ class Marketplace extends Component {
         category: player.category,
         owned: false,
       }
-      market.push(newPlayer);
+      market[playerNum] = newPlayer;
     };
     
     // get players owned
@@ -41,26 +48,26 @@ class Marketplace extends Component {
 
   async onClick(id){
     const { api, account } = this.props;
-    await api.buyPlayer(id, account)
-      .then(response => {
-        console.log('nice');
-      })
-      .catch(error => {
-        window.alert(error);
-      })
+
+    try{
+      await api.buyPlayer(id, account);
+      this.routeChange();
+    }catch(error){
+      window.alert(error);
+    }
   }
 
   render() {
     const { market } = this.props;
     return (
       <div className="content mr-auto ml-auto">
-        <CardDeck>
+        <CardColumns>
           {
-            market.map((player, i) => 
-              <QuidditchCard player={player} onClick={() => this.onClick(i)} key={i}/>
+            Object.keys(market).map((player) => 
+              <QuidditchCard player={market[player]} onClick={() => this.onClick(player)} key={player}/>
             )
           }
-        </CardDeck>
+        </CardColumns>
       </div>
     );
   }

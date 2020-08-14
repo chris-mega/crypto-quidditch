@@ -1,17 +1,17 @@
 import React from 'react';
-import { CardDeck } from 'react-bootstrap';
+import { CardColumns } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import QuidditchCard from './Card'
 
 const MyPlayers = ({ players }) => (
   <div className="content mr-auto ml-auto">
-    <CardDeck>
+    <CardColumns>
       {
         players.map((player, i) => 
           <QuidditchCard player={player} onClick={() => this.onClick(i)} key={i}/>
         )
       }
-    </CardDeck>
+    </CardColumns>
   </div>
 );
 

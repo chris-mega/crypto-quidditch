@@ -21,6 +21,11 @@ contract QuidditchPlayer is ERC721Full{
 
   constructor() ERC721Full("QuidditchPlayer", "QP") public {
     dappOwner = msg.sender;
+    createPlayer("Harry Potter", "Gryffindor", "Seeker", true, "Hogwarts");
+    createPlayer("Robert Guderian", "Bisons", "Keeper", false, "Canadian League");
+    createPlayer("Ginny Potter", "Holyhead Harpies", "Chaser", true, "British League");
+    createPlayer("Victor Krum", "Bulgarian National", "Seeker", true, "World Class");
+    createPlayer("Aragorn son of Arathorn, called Elessar, the Elfstone, Dúnadan, the heir of Isildur Elendil's son of Gondor", "Gondor National", "Seeker", false, "World Class");
   }
 
   function createPlayer(
@@ -39,5 +44,9 @@ contract QuidditchPlayer is ERC721Full{
     address _user = msg.sender;
     playerIndexToUser[_playerId] = _user;
     _mint(_user, _playerId);
+  }
+
+  function owns(address _claimant, uint _playerId) public returns (bool) {
+    return playerIndexToUser[_playerId] == _claimant;
   }
 }

@@ -1,7 +1,7 @@
 import { createStore } from 'redux'
 import { CHANGE_ALL, UPDATE_OWNED, UPDATE_MARKET, } from './playerActions';
 const initialState = {
-  marketPlayers: [],
+  marketPlayers: {},
   myPlayers: [],
 }
 function players(state = initialState, action) {
