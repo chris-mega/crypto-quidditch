@@ -6,7 +6,7 @@ const QuidditchCard = ({player, onClick}) => (
     bg={player.cannon ? 'info' : 'light'}
     text={player.cannon ? 'white' : 'dark'}
   >
-    <Card.Img variant="top" src="holder.js/100px180?text=Image cap" />
+    {/* <Card.Img variant="top" src="holder.js/100px180?text=Image cap" /> */}
     <Card.Header>
       <Card.Title>{player.name}</Card.Title>
       <Card.Text>{player.position}</Card.Text>

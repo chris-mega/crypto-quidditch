@@ -27,3 +27,4 @@ npm start
 ## Third Party
 - *Base template grabbed from [dappUniversity/starter_kit](https://github.com/dappuniversity/starter_kit)*
 - *Cannon Quidditch Player's names grabbed from [Harry Potter Wiki](https://harrypotter.fandom.com/wiki/Quidditch)*
+- *Logo made by [Michele Melendez](https://melenmiart.wixsite.com/website)*

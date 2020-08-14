@@ -1,12 +1,10 @@
 import React, { Component } from 'react';
 import { CardDeck } from 'react-bootstrap';
+import { connect } from 'react-redux';
+import { changeAllPlayers } from './redux/playerActions';
 import QuidditchCard from './Card'
 
 class Marketplace extends Component {
-  state = {
-    marketPlayers: [],
-  };
-
   async componentDidMount() {
     try{
       await this.loadBlockchainData();
@@ -16,7 +14,7 @@ class Marketplace extends Component {
   }
 
   async loadBlockchainData() {
-    const { api, account } = this.props;
+    const { api, account, dispatch } = this.props;
       
     const results = await api.getPlayers();
     var market = [];
@@ -38,7 +36,7 @@ class Marketplace extends Component {
       market[own].owned = true;
     };
 
-    this.setState({ marketPlayers: market });
+    dispatch(changeAllPlayers(market));
   }
 
   async onClick(id){
@@ -53,12 +51,12 @@ class Marketplace extends Component {
   }
 
   render() {
-    const { marketPlayers } = this.state;
+    const { market } = this.props;
     return (
       <div className="content mr-auto ml-auto">
         <CardDeck>
           {
-            marketPlayers.map((player, i) => 
+            market.map((player, i) => 
               <QuidditchCard player={player} onClick={() => this.onClick(i)} key={i}/>
             )
           }
@@ -68,4 +66,6 @@ class Marketplace extends Component {
   }
 }
 
-export default Marketplace;
+export default connect((state) => ({
+  market: state.marketPlayers,
+}))(Marketplace);
