@@ -1,3 +1,7 @@
+<div align="center">
+   <img src="./public/favicon.ico" alt="logo" width="200" />
+</div>
+
 # CryptoQuidditch
 This is originally a project for COMP3010 - "Distributed Computing" at the [University of Manitoba](https://www.sci.umanitoba.ca/cs/). This is my exploration of how to implement a dapp in Ethereum (understanding non-fungible tokens, writing smart contracts, calling them in frontend and deploying)
 
