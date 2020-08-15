@@ -52,7 +52,9 @@ class Marketplace extends Component {
     try{
       await api.buyPlayer(id, account);
       this.routeChange();
+      // TODO no redirecting
     }catch(error){
+      console.log(error.message)
       window.alert(error);
     }
   }

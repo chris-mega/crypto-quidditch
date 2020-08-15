@@ -24,12 +24,12 @@ contract('QuidditchPlayer', (accounts) => {
   describe('creation', async() => {
     it('creates a new player', async () => {
       await contract.createPlayer(
-        'Harry Potter', 'Gryffindor', 'Seeker', true, 'Hogwarts'
+        'Harry Potter2', 'Gryffindor', 'Seeker', true, 'Hogwarts'
       );
       const player = await contract.players(0);
       assert.equal(player.name, 'Harry Potter', 'name is correct');
       const count = await contract.playersCount();
-      assert.equal(count.toNumber(), 1, 'there is one player');
+      assert.equal(count.toNumber(), 6, 'there is one player');
     })
     it('throws exception for not owner', async () => {
       try{
@@ -53,13 +53,20 @@ contract('QuidditchPlayer', (accounts) => {
       assert.equal(supply, 1, 'totalSupply is correct')
     })
     it('other user adds a player to user', async () => {
-      const result = await contract.addPlayerToUser(1, {from: accounts[1]});
-      const supply = await contract.balanceOf(accounts[1]);
-      const event = result.logs[0].args;
-      assert.equal(event.tokenId.toNumber(), 1, 'id is correct');
-      assert.equal(event.from, '0x0000000000000000000000000000000000000000', 'from is correct');
-      assert.equal(event.to, accounts[1], 'to is correct')
-      assert.equal(supply, 1, 'totalSupply is correct')
+      var result = await contract.addPlayerToUser(1, {from: accounts[1]});
+      var supply = await contract.balanceOf(accounts[1]);
+      var event = result.logs[0].args;
+      assert.equal(event.tokenId.toNumber(), 1, 'add id is correct');
+      assert.equal(event.from, '0x0000000000000000000000000000000000000000', 'add from is correct');
+      assert.equal(event.to, accounts[1], 'add to is correct')
+      assert.equal(supply, 1, 'add totalSupply is correct')
+
+      result = await contract.sellPlayer(1, {from: accounts[1]});
+      supply = await contract.balanceOf(accounts[1]);
+      event = result.logs[0].args;
+      assert.equal(event.from, accounts[1], 'sell from is correct');
+      assert.equal(event.to, accounts[0], 'to is correct')
+      assert.equal(supply, 0, 'sell totalSupply is correct');
     })
   })
 })

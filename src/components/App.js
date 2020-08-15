@@ -75,7 +75,7 @@ class App extends Component {
                 <Switch>
                   <Route exact path='/' component={() => <MarketPlace api={api} account={account}/>}/>
                   <Route exact path='/marketplace' component={() => <MarketPlace api={api} account={account}/>}/>
-                  <Route exact path='/myplayers' component={() => <MyPlayers />}/>
+                  <Route exact path='/myplayers' component={() => <MyPlayers api={api} account={account}/>}/>
                 </Switch>
               </main>
             </div>

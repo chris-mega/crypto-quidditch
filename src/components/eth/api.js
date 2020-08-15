@@ -38,6 +38,19 @@ class QuidditchApi{
     }
   }
 
+  async sellPlayer(id, account){
+    // TODO metamask is throwing errors when calling this function (it works with unit tests)
+    try{
+      const response = await this.contract.methods.sellPlayer(id).send({from: account});
+      return response;
+    }catch(error){
+      console.log(error.message)
+      if(error.code === -32603)
+        throw new Error('You already own this');
+      else throw new Error('Something went wrong');
+    }
+  }
+
 }
 
 export default QuidditchApi;

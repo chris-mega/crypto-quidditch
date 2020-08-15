@@ -49,4 +49,10 @@ contract QuidditchPlayer is ERC721Full{
   function owns(address _claimant, uint _playerId) public returns (bool) {
     return playerIndexToUser[_playerId] == _claimant;
   }
+
+  function sellPlayer(uint _playerId) public {
+    require(ownerOf(_playerId) == msg.sender);
+    delete playerIndexToUser[_playerId];
+    transferFrom(msg.sender, dappOwner, _playerId);
+  }
 }

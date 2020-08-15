@@ -15,10 +15,7 @@ const QuidditchCard = ({player, onClick}) => (
         <ListGroupItem className='listItem'><b>Category: </b>{player.category}</ListGroupItem>
         <ListGroupItem className='listItem'><b>Team: </b>{player.team}</ListGroupItem>
       </ListGroup>
-      {
-        !player.owned &&
-        <Button variant="warning" onClick={onClick} style={{ width: '100%' }}>Buy</Button>
-      }
+      <Button variant="warning" onClick={onClick} style={{ width: '100%' }}>{player.owned ? 'Sale' : 'Buy'}</Button>
     </Card>
   </Col>
 );
