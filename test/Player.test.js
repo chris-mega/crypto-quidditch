@@ -60,13 +60,25 @@ contract('QuidditchPlayer', (accounts) => {
       assert.equal(event.from, '0x0000000000000000000000000000000000000000', 'add from is correct');
       assert.equal(event.to, accounts[1], 'add to is correct')
       assert.equal(supply, 1, 'add totalSupply is correct')
+    })
+  })
 
-      result = await contract.sellPlayer(1, {from: accounts[1]});
+  describe('selling player', async() => {
+    it('user adds and then sells player', async () => {
+      var result = await contract.addPlayerToUser(2, {from: accounts[1]});
+      var supply = await contract.balanceOf(accounts[1]);
+      var event = result.logs[0].args;
+      assert.equal(event.tokenId.toNumber(), 2, 'add id is correct');
+      assert.equal(event.from, '0x0000000000000000000000000000000000000000', 'add from is correct');
+      assert.equal(event.to, accounts[1], 'add to is correct')
+      assert.equal(supply, 2, 'add totalSupply is correct')
+
+      result = await contract.sellPlayer(2, {from: accounts[1]});
       supply = await contract.balanceOf(accounts[1]);
       event = result.logs[0].args;
       assert.equal(event.from, accounts[1], 'sell from is correct');
       assert.equal(event.to, accounts[0], 'to is correct')
-      assert.equal(supply, 0, 'sell totalSupply is correct');
+      assert.equal(supply, 1, 'sell totalSupply is correct');
     })
   })
 })
