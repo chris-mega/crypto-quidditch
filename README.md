@@ -28,6 +28,12 @@ npm install
 npm start
 ```
 
+## TODO
+- Add more functions to contract (e.g. auction, calculate price based on player attributes)
+- Fix Metamask issue with transfers
+- Fix redirect problems
+- Improve the UI
+
 ## Third Party
 - *Base template grabbed from [dappUniversity/starter_kit](https://github.com/dappuniversity/starter_kit)*
 - *Cannon Quidditch Player's names grabbed from [Harry Potter Wiki](https://harrypotter.fandom.com/wiki/Quidditch)*
